@@ -1,36 +1,27 @@
 <?php
+
 namespace App\Traits;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
-trait StoreageImageTrait
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\JsonResponse;
+
+trait DeleteTrait
 {
-    public function StoreImageUpload($request,$fieldName,$folderName)
-    {
-        if($request->hasFile($fieldName)){
-            $file =$request->$fieldName;
-            $fileNameOrigin =$file->getClientOriginalName();
-            $fileNameHash = Str::random(20).'.'.$file->getClientOriginalExtension();
-            $filePath = $request->file($fieldName)->storeAs('public/'.$folderName.'/'.auth()->id() , $fileNameHash);
-            $dataUploadTrait=[
-                'file_name'=>$fileNameOrigin,
-                'file_path'=>Storage::url($filePath)
-            ];
-            return $dataUploadTrait;
-        }
-            return  null;
+public function deleteTrait($model, $id)
+{
+    try {
+        $data=[
+            'code' => 200,
+            'message' => 'Delete success'
+        ];
+        $model->find($id)->delete();
+        return response()->json($data, 200);
+    } catch (\Exception $exception) {
+        Log::error('Error ' . $exception->getMessage() . ' --Line: ' . $exception->getLine());
+        return response()->json([
+            'code' => 500,
+            'message' => 'Delete fail'
+        ], 500);
     }
-    public function StoreImageUploadMuntiple($file,$folderName)
-    {
-
-            $fileNameOrigin =$file->getClientOriginalName();
-            $fileNameHash = Str::random(20).'.'.$file->getClientOriginalExtension();
-            $filePath = $file->storeAs('public/'.$folderName.'/'.auth()->id() , $fileNameHash);
-            $dataUploadTrait=[
-                'file_name'=>$fileNameOrigin,
-                'file_path'=>Storage::url($filePath)
-            ];
-            return $dataUploadTrait;
-
-    }
+}
 }

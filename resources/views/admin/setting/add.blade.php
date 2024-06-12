@@ -4,51 +4,51 @@
     <title>Slider</title>
 @endsection
 @section('css')
-    <link rel="stylesheet" href="{{asset('/admins/slider/add/add.css')}}" type="text/css" />
+    <link rel="stylesheet" href="{{asset('/admins/setting/add/add.css')}}" type="text/css"/>
 
 @endsection
 @section('content')
     <div class="content-wrapper">
-        @include('partials.contentHeader',['name'=>'Slider','key'=>'Add'])
+        @include('partials.contentHeader',['name'=>'Setting','key'=>'Add'])
 
 
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-6">
-                        <form action="{{route('sliders.store')}}" method="post" enctype="multipart/form-data">
+                        <form action="{{route('setting.store').'?type='.request()->type}}" method="post">
                             @csrf
                             <div class="mb-3">
-                                <label class="form-label">Name Slider</label>
-                                <input class="form-control @error('name')is-invalid @enderror "
-                                       name="name"
-                                       placeholder="Name Slider"
-                                       value="{{old('name')}}"
+                                <label class="form-label">Config Key</label>
+                                <input class="form-control @error('config_key')is-invalid @enderror "
+                                       name="config_key"
+                                       placeholder="Config Key"
+                                       value="{{old('config_key')}}"
                                 >
-                                @error('name')
+                                @error('config_key')
                                 <div class="alert alert-danger validation_css">{{$message}}</div>
                                 @enderror
                             </div>
-                            <div class="form-group">
-                                <label>Description</label>
-                                <textarea
-                                    class="form-control @error('description')is-invalid @enderror"
-                                    name="description"
-                                    rows="3"
-                                    cols="3"
-                                >
-                                    {{old('description')}}
-                                </textarea>
-                                @error('description')
-                                <div class="alert alert-danger validation_css">{{$message}}</div>
-                                @enderror
-                            </div>
-                            <div class="input-group mb-3">
-                                <label for="main_img" class="mb-1">Image</label>
-                                <input type="file" class="form-control-file @error('image_path')is-invalid @enderror"
-                                       name="image_path"
-                                >
-                                @error('image_path')
+                            <div class="mb-3">
+                                <label class="form-label">Config Value</label>
+                            @if(request()->type  ==='text')
+
+                                    <input class="form-control @error('config_value')is-invalid @enderror "
+                                           name="config_value"
+                                           placeholder="Config Value"
+                                           value="{{old('config_value')}}"
+                                    >
+                                @elseif(request()->type  ==='textarea')
+                                    <textarea
+                                            class="form-control @error('config_value')is-invalid @enderror "
+                                           name="config_value"
+                                           placeholder="Config Value"
+                                    >
+                                        {{old('config_value')}}
+                                    </textarea>
+
+                            @endif
+                                @error('config_value')
                                 <div class="alert alert-danger validation_css">{{$message}}</div>
                                 @enderror
                             </div>

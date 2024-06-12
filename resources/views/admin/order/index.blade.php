@@ -1,52 +1,46 @@
 @extends('layout.admin')
 
 @section('title')
-    <title>Menu</title>
+    <title>Order</title>
 @endsection
 
 @section('content')
     <div class="content-wrapper">
-        @include('partials.contentHeader',['name'=>'Menu','key'=>'List'])
+        @include('partials.contentHeader',['name'=>'Order','key'=>'List'])
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    @can('menu-add')
-                        <div class="col-lg-12">
-                            <a href="{{route('menus.creat')}}" class="btn btn-primary float-right mb-3">Add Menu</a>
-                        </div>
-                    @endcan
-
 
                     <div class="col-lg-12">
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                @canany(['menu-edit','menu-delete'])
-                                    <th scope="col">Action</th>
-                                @endcanany
+                                <th scope="col">Order Code</th>
+                                <th scope="col">Phone number</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($menus as $i)
+                            @foreach($order as $i)
                                 <tr>
-                                    <td>{{$i->id}}</td>
-                                    <td>{{ $i->name }}</td>
-                                    @canany(['menu-edit','menu-delete'])
-                                        <td>
-                                            @can('menu-edit')
-                                                <a href="{{route('menus.edit',['id'=>$i->id])}}"
-                                                   class="btn btn-primary">Edit</a>
-                                            @endcan
-                                            @can('menu-delete')
-                                                <a href="{{route('menus.delete',['id'=>$i->id])}}"
-                                                   class="btn btn-danger ">Delete</a>
-
-                                            @endcan
-                                        </td>
-                                    @endcanany
-
+                                    <td>{{$i->code_order}}</td>
+                                    <td>{{ $i->phone_number }}</td>
+                                    <td><span
+                                            class="
+                                        @if($i->status=='success')
+                                        text-success
+                                        @elseif($i->status=='on the way')
+                                        text-primary
+                                        @elseif($i->status=='preparing')
+                                        text-primary
+                                        @else
+                                        text-warning
+                                         @endif
+                                     ">{{ $i->status }}</span></td>
+                                    <td>
+                                        <a href="{{route('order.view',['id'=>$i->id])}}" class="btn btn-primary">View</a>
+                                    </td>
                                 </tr>
                             @endforeach
 
@@ -56,7 +50,7 @@
 
                     </div>
                     <div class=" col-lg-12">
-                        {{$menus->links()}}
+                        {{$order->links()}}
                     </div>
                 </div>
 

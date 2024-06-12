@@ -17,47 +17,45 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-6">
-                        <form action="{{route('sliders.update',['id'=>$slider->id])}}" method="post" enctype="multipart/form-data">
+                        <form action="{{route('setting.update',['id'=>$setting->id]).'?type='.request()->type}}" method="post">
                             @csrf
                             <div class="mb-3">
-                                <label class="form-label">Name Slider</label>
-                                <input class="form-control @error('name')is-invalid @enderror "
-                                       name="name"
-                                       placeholder="Name Slider"
-                                       value="{{$slider->name}}"
+                                <label class="form-label">Config Key</label>
+                                <input class="form-control @error('config_key')is-invalid @enderror "
+                                       name="config_key"
+                                       placeholder="Config Key"
+                                       value="{{$setting->config_key}}"
                                 >
-                                @error('name')
+                                @error('config_key')
                                 <div class="alert alert-danger validation_css">{{$message}}</div>
                                 @enderror
                             </div>
-                            <div class="form-group">
-                                <label>Description</label>
-                                <textarea
-                                    class="form-control @error('description')is-invalid @enderror"
-                                    name="description"
-                                    rows="3"
-                                    cols="3"
-                                >
-                                    {{$slider->description}}
-                                </textarea>
-                                @error('description')
+                            <div class="mb-3">
+                                <label class="form-label">Config Value</label>
+                                @if(request()->type  ==='text')
+
+                                    <input class="form-control @error('config_value')is-invalid @enderror "
+                                           name="config_value"
+                                           placeholder="Config Value"
+                                           value="{{$setting->config_value}}"
+                                    >
+                                @elseif(request()->type  ==='textarea')
+                                    <textarea
+                                        class="form-control @error('config_value')is-invalid @enderror "
+                                        name="config_value"
+                                        placeholder="Config Value"
+                                    >
+                                       {{$setting->config_value}}
+                                    </textarea>
+
+                                @endif
+                                @error('config_value')
                                 <div class="alert alert-danger validation_css">{{$message}}</div>
                                 @enderror
-                            </div>
-                            <div class="input-group mb-3">
-                                <label for="main_img" class="mb-1">Image</label>
-                                <input type="file" class="form-control-file @error('image_path')is-invalid @enderror"
-                                       name="image_path"
-                                >
-                                @error('image_path')
-                                <div class="alert alert-danger validation_css">{{$message}}</div>
-                                @enderror
-                            </div>
-                            <div class="col-lg-12 mb-5">
-                                <img src="{{$slider->image_path}}" class="w-100 rounded">
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
+
                     </div>
 
                 </div>

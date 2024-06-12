@@ -1,55 +1,70 @@
 @extends('layout.admin')
 
 @section('title')
-    <title>Slider</title>
+    <title>User</title>
 @endsection
 @section('css')
-    <link rel="stylesheet" href="{{asset('/admins/slider/add/add.css')}}" type="text/css" />
-
+    <link rel="stylesheet" href="{{asset('/vendors/select2/select2.min.css')}}" type="text/css" />
+    <link rel="stylesheet" href="{{asset('/admins/user/add/add.css')}}" type="text/css" />
 @endsection
+
 @section('content')
     <div class="content-wrapper">
-        @include('partials.contentHeader',['name'=>'Slider','key'=>'Add'])
+        @include('partials.contentHeader',['name'=>'User','key'=>'Add'])
 
 
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-6">
-                        <form action="{{route('sliders.store')}}" method="post" enctype="multipart/form-data">
+                        <form action="{{route('users.store')}}" method="post">
                             @csrf
                             <div class="mb-3">
-                                <label class="form-label">Name Slider</label>
-                                <input class="form-control @error('name')is-invalid @enderror "
+                                <label class="form-label">Name</label>
+                                <input class="form-control @error('name') is-invalid @enderror"
                                        name="name"
-                                       placeholder="Name Slider"
+                                       placeholder="Name"
                                        value="{{old('name')}}"
                                 >
                                 @error('name')
-                                <div class="alert alert-danger validation_css">{{$message}}</div>
+                                <div class="alert alert-danger validation_css">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="form-group">
-                                <label>Description</label>
-                                <textarea
-                                    class="form-control @error('description')is-invalid @enderror"
-                                    name="description"
-                                    rows="3"
-                                    cols="3"
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input class="form-control @error('email') is-invalid @enderror"
+                                       name="email"
+                                       type="email"
+                                       placeholder="Email"
+                                       value="{{old('email')}}"
                                 >
-                                    {{old('description')}}
-                                </textarea>
-                                @error('description')
-                                <div class="alert alert-danger validation_css">{{$message}}</div>
+                                @error('email')
+                                <div class="alert alert-danger validation_css">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="input-group mb-3">
-                                <label for="main_img" class="mb-1">Image</label>
-                                <input type="file" class="form-control-file @error('image_path')is-invalid @enderror"
-                                       name="image_path"
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input class="form-control @error('password') is-invalid @enderror"
+                                       name="password"
+                                       type="password"
+                                       placeholder="Password"
+                                       value="{{old('password')}}"
                                 >
-                                @error('image_path')
-                                <div class="alert alert-danger validation_css">{{$message}}</div>
+                                @error('password')
+                                <div class="alert alert-danger validation_css">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Select Role</label>
+                                <select name="role_id[]" class="form-control select2_int @error('role_id') is-invalid @enderror" multiple="multiple">
+                                    @foreach($roles as $i)
+                                        <option value="{{$i->id}}">{{$i->name}}</option>
+                                    @endforeach
+
+
+                                </select>
+                                @error('role_id')
+                                <div class="alert alert-danger validation_css">{{ $message }}</div>
                                 @enderror
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
@@ -62,4 +77,12 @@
         </div>
 
     </div>
+@endsection
+@section('js')
+    <script src="{{asset('/vendors/select2/select2.min.js')}}"></script>
+    <script >
+        $('.select2_int').select2({
+            'placeholder':'Select Role'
+        })
+    </script>
 @endsection

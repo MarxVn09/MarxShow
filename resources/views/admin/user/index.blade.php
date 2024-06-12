@@ -1,49 +1,57 @@
 @extends('layout.admin')
 
 @section('title')
-    <title>Slider</title>
+    <title>User</title>
 @endsection
 @section('css')
     <link rel="stylesheet" href="{{asset('/admins/slider/index/index.css')}}" type="text/css"/>
 @endsection
 @section('content')
     <div class="content-wrapper">
-        @include('partials.contentHeader',['name'=>'Slider','key'=>'List'])
+        @include('partials.contentHeader',['name'=>'User','key'=>'List'])
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <a href="{{route('sliders.creat')}}" class="btn btn-primary float-right mb-3">Add
-                            Slider</a>
-
-                    </div>
+                    @can('user-add')
+                        <div class="col-lg-12">
+                            <a href="{{route('users.creat')}}" class="btn btn-primary float-right mb-3">Add
+                                User</a>
+                        </div>
+                    @endcan
                     <div class="col-lg-12">
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Action</th>
+                                <th scope="col">Email</th>
+                                @canany(['user-edit','user-delete'])
+                                    <th scope="col">Action</th>
+                                @endcanany
+
 
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($sliders as $i)
+                            @foreach($users as $i)
                                 <tr>
                                     <td>{{$i->id}}</td>
                                     <td>{{ $i->name }}</td>
-                                    <td>
-                                        <img src="{{ $i->image_path }}" alt="" class="img_150_100">
-                                    </td>
-                                    <td class="">{{ $i->description }}</td>
-                                    <td>
-                                        <a href="{{route('sliders.edit',['id'=>$i->id])}}" class="btn btn-primary">Edit</a>
-                                        <a href=""
-                                           data-url="{{route('sliders.delete',['id'=>$i->id])}}"
-                                           class="btn btn-danger delete_button ">Delete</a>
-                                    </td>
+                                    <td class="">{{ $i->email }}</td>
+                                    @canany(['user-edit','user-delete'])
+                                        <td>
+                                            @can('user-edit')
+                                                <a href="{{route('users.edit',['id'=>$i->id])}}" class="btn btn-primary">Edit</a>
+                                            @endcan
+                                            @can('user-delete')
+                                                <a href=""
+                                                   data-url="{{route('users.delete',['id'=>$i->id])}}"
+                                                   class="btn btn-danger delete_button ">Delete</a>
+                                            @endcan
+
+                                        </td>
+                                    @endcanany
+
                                 </tr>
                             @endforeach
 
@@ -53,7 +61,7 @@
 
                     </div>
                     <div class=" col-lg-12">
-                        {{$sliders->links()}}
+                        {{$users->links()}}
                     </div>
                 </div>
 

@@ -10,58 +10,53 @@
 
 @section('content')
     <div class="content-wrapper">
-        @include('partials.contentHeader',['name'=>'User','key'=>'Add'])
+        @include('partials.contentHeader',['name'=>'User','key'=>'Edit'])
 
 
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-6">
-                        <form action="{{route('users.store')}}" method="post">
+                        <form action="{{route('users.update',['id'=>$user->id])}}" method="post">
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Name</label>
-                                <input class="form-control @error('name') is-invalid @enderror"
+                                <input class="form-control "
                                        name="name"
                                        placeholder="Name"
+                                       value="{{$user->name}}"
                                 >
-                                @error('name')
-                                <div class="alert alert-danger validation_css">{{ $message }}</div>
-                                @enderror
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Email</label>
-                                <input class="form-control @error('email') is-invalid @enderror"
+                                <input class="form-control "
                                        name="email"
                                        type="email"
                                        placeholder="Email"
+                                       value="{{$user->email}}"
                                 >
-                                @error('email')
-                                <div class="alert alert-danger validation_css">{{ $message }}</div>
-                                @enderror
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Password</label>
-                                <input class="form-control @error('password') is-invalid @enderror"
+                                <input class="form-control "
                                        name="password"
+                                       type="password"
                                        placeholder="Password"
                                 >
-                                @error('password')
-                                <div class="alert alert-danger validation_css">{{ $message }}</div>
-                                @enderror
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Select Role</label>
-                                <select name="role_id[]" class="form-control select2_int @error('role_id') is-invalid @enderror" multiple="multiple">
+                                <select name="role_id[]" class="form-control select2_int " multiple="multiple">
                                     @foreach($roles as $i)
-                                        <option value="{{$i->id}}">{{$i->name}}</option>
+                                        <option
+                                            {{$roleOfUser->contains('id', $i->id) ?'selected': '' }}
+                                            value="{{$i->id}}">{{$i->name}}
+                                        </option>
                                     @endforeach
 
 
                                 </select>
-                                @error('role_id')
-                                <div class="alert alert-danger validation_css">{{ $message }}</div>
-                                @enderror
+
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
